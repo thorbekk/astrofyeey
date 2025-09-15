@@ -1,0 +1,25 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/preview_page.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/(.*).html",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
+}

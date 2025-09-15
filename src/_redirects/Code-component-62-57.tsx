@@ -1,0 +1,1 @@
+// DELETED - This was not a valid React component
