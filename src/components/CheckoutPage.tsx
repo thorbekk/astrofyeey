@@ -12,6 +12,17 @@ import {
   formatBirthDataForShopify 
 } from '../lib/shopify';
 import { toast } from 'sonner@2.0.3';
+const FORMSPREE_URL = "https://formspree.io/f/xblavqpq";
+
+function sendToFormspree(formData: any) {
+  fetch(FORMSPREE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  }).catch(() => {
+    // Ignorer feil – vi vil ikke stoppe redirect
+  });
+}
 
 interface CheckoutPageProps {
   onComplete: () => void;
@@ -25,6 +36,10 @@ export function CheckoutPage({ onComplete, onBack, formData }: CheckoutPageProps
 
   // Handle direct checkout for selected plan
 const handleDirectCheckout = (plan: 'full' | 'mini') => {
+    if (formData) {
+    sendToFormspree(formData); // 👈 sender til Formspree i bakgrunnen
+  }
+
   if (plan === 'mini') {
     window.location.href =
       "https://astrofyeey.vercel.app/api/create-checkout?variantGid=gid://shopify/ProductVariant/45314321186972&quantity=1";
