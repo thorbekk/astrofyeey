@@ -24,53 +24,15 @@ export function CheckoutPage({ onComplete, onBack, formData }: CheckoutPageProps
   const [loadingPlan, setLoadingPlan] = useState<'full' | 'mini' | null>(null);
 
   // Handle direct checkout for selected plan
-  const handleDirectCheckout = async (plan: 'full' | 'mini') => {
-    setLoadingPlan(plan);
-    setIsCreatingCheckout(true);
-    
-    try {
-      // Load product data
-      const productHandle = plan === 'full' ? PRODUCT_HANDLES.FULL_REPORT : PRODUCT_HANDLES.MINI_REPORT;
-      let product;
-      
-      try {
-        product = await getProduct(productHandle);
-      } catch (error) {
-        console.error('Error loading Shopify product:', error);
-        // Fallback to mock data
-        product = MOCK_PRODUCTS[productHandle];
-      }
-      
-      if (!product?.variants?.edges?.[0]?.node?.id) {
-        toast.error('Product not available');
-        return;
-      }
-
-      // Create checkout with product
-      const variantId = product.variants.edges[0].node.id;
-      const checkout = await createCheckout(variantId, 1);
-      
-      if (!checkout) {
-        throw new Error('Failed to create checkout');
-      }
-
-      // Add customer email and birth data if available
-      if (formData?.email) {
-        const birthDataAttributes = formatBirthDataForShopify(formData);
-        await addCustomerToCheckout(checkout.id, formData.email, birthDataAttributes);
-      }
-
-      // Redirect to Shopify checkout
-      window.location.href = checkout.webUrl;
-      
-    } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error('Failed to create checkout. Please try again.');
-    } finally {
-      setIsCreatingCheckout(false);
-      setLoadingPlan(null);
-    }
-  };
+const handleDirectCheckout = (plan: 'full' | 'mini') => {
+  if (plan === 'mini') {
+    window.location.href =
+      "https://astrofyeey.vercel.app/api/create-checkout?variantGid=gid://shopify/ProductVariant/45314321186972&quantity=1";
+  } else {
+    window.location.href =
+      "https://astrofyeey.vercel.app/api/create-checkout?variantGid=gid://shopify/ProductVariant/45314320957596&quantity=1";
+  }
+};
 
   const plans = {
     full: {
